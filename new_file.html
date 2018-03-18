@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.container button{
+				width: 100px;
+			    height: 80px;
+			    background-color: lightblue;
+			    position: fixed;
+			    right: 100px;
+			    top:200px;
+			    cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>实现加载更多</h1>
+		<div class="container" id="container">
+			<div class="item">
+				<img src="images/vol.840.jpg" />
+				<div class="bottom">
+					
+				</div>
+			</div>
+			<button class="getMore" value="点击加载更多">点击加载更多</button>
+		</div>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/template-native.js"></script>
+		
+		<!--定义模板-->
+		<script id="wp" type="text/template">
+			<%for(var i=0;i<items.length;i++){%>
+				<div class="item">
+					<img src=<%=items[i].path%> />
+				</div>
+			<%}%>
+		</script>
+		<script type="text/javascript">
+			$(function(){
+				$('.getMore').on('click',function(){
+					$.ajax({
+						type:"get",
+						url:"02.getMore.php",
+						async:true,
+						success:function(data){
+							//转化为js对象数组
+							var onestr = JSON.parse(data);
+							//包装为js对象
+							var obj = {
+								items:[onestr]
+							}
+							var html=template('wp',obj);
+							$('#container').append(html);
+						}
+					});
+				})
+			})
+		</script>
+	</body>
+</html>
